@@ -7,6 +7,8 @@ import { Pokemon, PokemonSchema } from './entities/pokemon.entity';
 @Module({
   controllers: [PokemonController],
   providers: [PokemonService],
+
+  //ESTO Resgistra un nuevo pokemon en la base de datos mongodb
   imports: [
     MongooseModule.forFeature([
       {

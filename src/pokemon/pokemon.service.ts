@@ -59,10 +59,11 @@ export class PokemonService {
 
   async update(term: string, updatePokemonDto: UpdatePokemonDto) {
 
+    //Revisa si ya hay uno en la base de datos
     const pokemon = await this.findOne(term);
     if (updatePokemonDto.name) 
       updatePokemonDto.name = updatePokemonDto.name.toLocaleLowerCase();
-      
+      //AQUI ya lo actualiza 
     try {
       await pokemon.updateOne( updatePokemonDto )
       return {...pokemon.toJSON(), ...UpdatePokemonDto}
@@ -77,12 +78,14 @@ export class PokemonService {
     // const pokemon = await this.findOne(id);
     // await pokemon.deleteOne();
     //return {id}
+    //cuando hay un elemento muestro 1 sino 0, esto hace que muestro un erro si no hay nada
     const { deletedCount } = await this.pokemonModel.deleteOne({_id: id})
     if (deletedCount === 0)
       throw new BadRequestException(`Pokemon con el id ${id} no fue encontradp`)
     return;
   }
 
+  //Esto es un error "11000" es por que ya esta duplicado
   private handleException(error: any ){
     if ( error.code === 11000 ) {
         throw new BadRequestException(`Ya existe un pokemon con ese id o nombre en la basae de datos ${JSON.stringify( error.keyValue )}`);
