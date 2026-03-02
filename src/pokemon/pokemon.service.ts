@@ -20,10 +20,15 @@ export class PokemonService {
 
     try {
       const pokemon = await this.pokemonModel.create(createPokemonDto)
-      return pokemon
+      return pokemon;
       
     } catch (error) {
-      this.handleException(error)
+      if ( error.code === 1100) {
+        throw new BadRequestException(`Pkemon ya existe en la db ${ JSON.stringify(error.keyValue)}`)
+      }
+      console.log(error);
+      throw new  InternalServerErrorException(`No pudimos crear o actualizar, revise los sever logs`)
+      
     }
 
 
@@ -81,7 +86,7 @@ export class PokemonService {
     //cuando hay un elemento muestro 1 sino 0, esto hace que muestro un erro si no hay nada
     const { deletedCount } = await this.pokemonModel.deleteOne({_id: id})
     if (deletedCount === 0)
-      throw new BadRequestException(`Pokemon con el id ${id} no fue encontradp`)
+      throw new BadRequestException(`Pokemon con el id ${id} no fue encontrado`)
     return;
   }
 
