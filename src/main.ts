@@ -16,10 +16,16 @@ async function bootstrap() {
     new ValidationPipe({ 
       whitelist: true, //Estp acepta solo campos que tengamos en los DTO´s
       forbidNonWhitelisted: true, //Mandara error si se añade una propiedad extra de los DTO´S 
+      transform: true,
+      transformOptions: {
+        enableImplicitConversion: true,
+      }
   }) 
 );
 
   MongooseModule.forRoot('mongodb://localhost:27017/nest-pokemon')
   await app.listen(process.env.PORT ?? 3000);
+  console.log(`app running on port ${process.env.PORT}`);
+  
 }
 bootstrap();
